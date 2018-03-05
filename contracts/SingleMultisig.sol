@@ -9,8 +9,6 @@ import 'zeppelin-solidity/contracts/lifecycle/Destructible.sol';
 /// Allows multiple parties to agree on a single transaction before execution.
 /// The contract is destroyed after execution.
 /// Based on Gnosis Multisig Wallet - https://github.com/gnosis/MultiSigWallet.
-/// Blockchain Identification Graph - BIG
-/// http://bigtoken.com/
 ///
 
 contract SingleMultiSig is Ownable, Destructible {

@@ -1,8 +1,8 @@
-# Single Transaction Multi Sig
+# Single Transaction Multi Signature Contract
 
 ## Description
-A single transaction multi signature wallet based on: [Gnosis Multisig](https://github.com/gnosis/MultiSigWallet).
-This includes the modifier:
+A single transaction multi signature contract based on: [Gnosis Multisig](https://github.com/gnosis/MultiSigWallet).
+This version includes the modifier:
 ```    
 modifier onlyOneTransaction() {
       require(transactionCount == 0);
@@ -10,7 +10,7 @@ modifier onlyOneTransaction() {
 
     }
 ```
-which allos for only one transaction. After that the contract is rendered unusable.
+which allows for only one transaction. After that the contract is rendered unusable.
 
 
 ## Install
