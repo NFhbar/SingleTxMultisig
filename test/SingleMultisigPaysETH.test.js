@@ -9,16 +9,17 @@ contract('SingleMultisig - Contract Pays ETH', accounts => {
     let singlemultisig;
     const owners = [accounts[0], accounts[1], accounts[2]];
     const required = 2;
-    const original_balance = web3.eth.getBalance(accounts[2]);
+    let original_balance = web3.eth.getBalance(accounts[2]);
+    console.log(original_balance);
 
     //deploy
     singlemultisig = await SingleMultisig.new(owners, required, { from: accounts[0] });
 
     //sets owner correctly
-    assert.equal(await singlemultisig.owner(), accounts[0]);
+    assert.equal(await singlemultisig.owner(), singlemultisig.address);
 
     //send ETH to contract
-    const value = 100;
+    let value = 100;
     const data="";
     await web3.eth.sendTransaction({
        from: accounts[0],
@@ -26,7 +27,7 @@ contract('SingleMultisig - Contract Pays ETH', accounts => {
        value: value,
        gas: 1000000
      });
-    assert(web3.eth.getBalance(singlemultisig.address),value);
+    assert.equal(web3.eth.getBalance(singlemultisig.address),value);
 
     //Submit transaction
     await singlemultisig.submitTransaction(accounts[2], value, "", {from: accounts[0]});
@@ -51,7 +52,7 @@ contract('SingleMultisig - Contract Pays ETH', accounts => {
     await expectThrow(singlemultisig.submitTransaction(accounts[2], value, data, { from: accounts[0] }));
 
     //check other owners can confirm
-    await singlemultisig.confirmTransaction(0, { from: accounts[1] });
+    singlemultisig.confirmTransaction(0, { from: accounts[1] });
     let newConfirmations = await singlemultisig.getConfirmationCount(0, { from: accounts[0] });
     confirmations = await singlemultisig.getConfirmations(0, { from: accounts[0] });
     assert.equal(2,newConfirmations);
@@ -61,8 +62,10 @@ contract('SingleMultisig - Contract Pays ETH', accounts => {
     const is_confirmed = await singlemultisig.isConfirmed(0);
     assert.equal(is_confirmed, true);
 
-    //check tx was correctly sent
-    assert(web3.eth.getBalance(singlemultisig.address), 0);
-    assert(web3.eth.getBalance(accounts[2]), original_balance + value);
+    //check tx was correctly sent and contract returned remaining ETH as per Destuctible()
+    assert.equal(web3.eth.getBalance(singlemultisig.address), 0);
+    original_balance = original_balance.toNumber();
+    assert.equal(web3.eth.getBalance(accounts[2]).toNumber(), original_balance + value);
+
   });
 });

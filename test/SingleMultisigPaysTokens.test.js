@@ -17,7 +17,7 @@ contract('SingleMultisig - Contract Pays Tokens', accounts => {
 
     //sets owner correctly
     const contract_address = await singlemultisig.address;
-    assert.equal(await singlemultisig.owner(), accounts[0]);
+    assert.equal(await singlemultisig.owner(), singlemultisig.address);
 
     //send Token to multisig contract
     await token.transfer(contract_address, balance, { from: accounts[1] });

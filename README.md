@@ -1,5 +1,12 @@
 # Single Transaction Multi Signature Contract
 
+<div>
+
+[![Build Status](https://travis-ci.org/NFhbar/SingleTxMultisig.png?branch=master)](https://travis-ci.org/NFhbar/SingleTxMultisig)
+[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
+
+</div>
+
 ## Description
 A single transaction multi signature contract based on: [Gnosis Multisig](https://github.com/gnosis/MultiSigWallet).
 This version includes the modifier:

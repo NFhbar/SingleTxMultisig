@@ -128,7 +128,7 @@ contract SingleMultiSig is Ownable, Destructible {
         }
         owners = _owners;
         required = _required;
-        //transferOwnership(address(this));
+        transferOwnership(address(this));
     }
 
     /// @dev Allows an owner to submit and confirm a transaction.
@@ -183,7 +183,7 @@ contract SingleMultiSig is Ownable, Destructible {
             txn.executed = true;
             if (txn.destination.call.value(txn.value)(txn.data)) {
                 Execution(transactionId);
-                //destroyContract();
+                destroyContract();
               }
             else {
                 ExecutionFailure(transactionId);
@@ -235,10 +235,11 @@ contract SingleMultiSig is Ownable, Destructible {
 
     /// @dev Destroys contract after one transaction is executed.
     function destroyContract()
-        private
+        internal
     {
       ContractDestroyed();
-      destroyAndSend(owners[0]);
+      /*if(this.balance != 0)
+        destroyAndSend(owners[0]);*/
     }
 
     /*
