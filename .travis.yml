@@ -9,4 +9,3 @@ script:
 - sleep 5
 - truffle migrate
 - truffle test
-- npm test
