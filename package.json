@@ -18,6 +18,10 @@
     "multisig"
   ],
   "author": "Nicolas Frega",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NFhbar/SingleTxMultisig"
+  },
   "license": "MIT",
   "devDependencies": {
     "babel-polyfill": "^6.26.0",
