@@ -1,8 +1,4 @@
-pragma solidity ^0.4.17;
-
-import 'zeppelin-solidity/contracts/ownership/Ownable.sol';
-import 'zeppelin-solidity/contracts/lifecycle/Destructible.sol';
-
+pragma solidity ^0.4.21;
 
 /// @title SingleMultisig.sol
 /// @author Nicolas Frega - <nicolas.frega@srax.com>
@@ -10,6 +6,9 @@ import 'zeppelin-solidity/contracts/lifecycle/Destructible.sol';
 /// The contract is destroyed after execution.
 /// Based on Gnosis Multisig Wallet - https://github.com/gnosis/MultiSigWallet.
 ///
+
+import 'zeppelin-solidity/contracts/ownership/Ownable.sol';
+import 'zeppelin-solidity/contracts/lifecycle/Destructible.sol';
 
 contract SingleMultiSig is Ownable, Destructible {
 
@@ -108,8 +107,9 @@ contract SingleMultiSig is Ownable, Destructible {
         public
         payable
     {
-        if (msg.value > 0)
-            Deposit(msg.sender, msg.value);
+        if (msg.value > 0) {
+            emit Deposit(msg.sender, msg.value);
+          }
     }
 
     /*
@@ -154,7 +154,7 @@ contract SingleMultiSig is Ownable, Destructible {
         notConfirmed(transactionId, msg.sender)
     {
         confirmations[transactionId][msg.sender] = true;
-        Confirmation(msg.sender, transactionId);
+        emit Confirmation(msg.sender, transactionId);
         executeTransaction(transactionId);
     }
 
@@ -167,7 +167,7 @@ contract SingleMultiSig is Ownable, Destructible {
         notExecuted(transactionId)
     {
         confirmations[transactionId][msg.sender] = false;
-        Revocation(msg.sender, transactionId);
+        emit Revocation(msg.sender, transactionId);
     }
 
     /// @dev Allows anyone to execute a confirmed transaction.
@@ -182,11 +182,11 @@ contract SingleMultiSig is Ownable, Destructible {
             Transaction storage txn = transactions[transactionId];
             txn.executed = true;
             if (txn.destination.call.value(txn.value)(txn.data)) {
-                Execution(transactionId);
+                emit Execution(transactionId);
                 destroyContract();
               }
             else {
-                ExecutionFailure(transactionId);
+                emit ExecutionFailure(transactionId);
                 txn.executed = false;
             }
         }
@@ -230,14 +230,14 @@ contract SingleMultiSig is Ownable, Destructible {
             executed: false
         });
         transactionCount += 1;
-        Submission(transactionId);
+        emit Submission(transactionId);
     }
 
     /// @dev Destroys contract after one transaction is executed.
     function destroyContract()
         internal
     {
-      ContractDestroyed();
+      emit ContractDestroyed();
       /*if(this.balance != 0)
         destroyAndSend(owners[0]);*/
     }
