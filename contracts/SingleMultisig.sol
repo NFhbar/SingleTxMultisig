@@ -7,8 +7,8 @@ pragma solidity ^0.4.21;
 /// Based on Gnosis Multisig Wallet - https://github.com/gnosis/MultiSigWallet.
 ///
 
-import 'zeppelin-solidity/contracts/ownership/Ownable.sol';
-import 'zeppelin-solidity/contracts/lifecycle/Destructible.sol';
+import "./Ownable.sol";
+import "./Destructible.sol";
 
 contract SingleMultiSig is Ownable, Destructible {
 
@@ -45,7 +45,6 @@ contract SingleMultiSig is Ownable, Destructible {
         bool executed;
     }
 
-
     /*
      *  Modifiers
      */
@@ -63,9 +62,10 @@ contract SingleMultiSig is Ownable, Destructible {
         require(isOwner[owner]);
         _;
     }
+
     modifier onlyOneTransaction() {
-      require(transactionCount == 0);
-      _;
+        require(transactionCount == 0);
+        _;
 
     }
 
@@ -95,10 +95,9 @@ contract SingleMultiSig is Ownable, Destructible {
     }
 
     modifier validRequirement(uint ownerCount, uint _required) {
-        require(ownerCount <= MAX_OWNER_COUNT
-            && _required <= ownerCount
-            && _required != 0
-            && ownerCount != 0);
+        require(
+            ownerCount <= MAX_OWNER_COUNT && _required <= ownerCount && _required != 0 && ownerCount != 0
+        );
         _;
     }
 
@@ -118,11 +117,11 @@ contract SingleMultiSig is Ownable, Destructible {
     /// @dev Contract constructor sets initial owners and required number of confirmations.
     /// @param _owners List of initial owners.
     /// @param _required Number of required confirmations.
-    function SingleMultiSig(address[] _owners, uint _required)
+    constructor(address[] _owners, uint _required)
         public
         validRequirement(_owners.length, _required)
     {
-        for (uint i=0; i<_owners.length; i++) {
+        for (uint i = 0; i < _owners.length; i++) {
             require(!isOwner[_owners[i]] && _owners[i] != 0);
             isOwner[_owners[i]] = true;
         }
@@ -197,11 +196,11 @@ contract SingleMultiSig is Ownable, Destructible {
     /// @return Confirmation status. FIX OR TEST THIS!!!!!!!!!!!!!!!!
     function isConfirmed(uint transactionId)
         public
-        constant
+        view
         returns (bool)
     {
         uint count = 0;
-        for (uint i=0; i<owners.length; i++) {
+        for (uint i = 0; i < owners.length; i++) {
             if (confirmations[transactionId][owners[i]])
                 count += 1;
             if (count == required)
@@ -237,9 +236,9 @@ contract SingleMultiSig is Ownable, Destructible {
     function destroyContract()
         internal
     {
-      emit ContractDestroyed();
-      /*if(this.balance != 0)
-        destroyAndSend(owners[0]);*/
+        emit ContractDestroyed();
+        /*if(this.balance != 0)
+          destroyAndSend(owners[0]);*/
     }
 
     /*
@@ -250,12 +249,13 @@ contract SingleMultiSig is Ownable, Destructible {
     /// @return Number of confirmations.
     function getConfirmationCount(uint transactionId)
         public
-        constant
+        view
         returns (uint count)
     {
-        for (uint i=0; i<owners.length; i++)
-            if (confirmations[transactionId][owners[i]])
+        for (uint i = 0; i < owners.length; i++)
+            if (confirmations[transactionId][owners[i]]) {
                 count += 1;
+            }
     }
 
 
@@ -263,7 +263,7 @@ contract SingleMultiSig is Ownable, Destructible {
     /// @return List of owner addresses.
     function getOwners()
         public
-        constant
+        view
         returns (address[])
     {
         return owners;
@@ -274,19 +274,19 @@ contract SingleMultiSig is Ownable, Destructible {
     /// @return Returns array of owner addresses.
     function getConfirmations(uint transactionId)
         public
-        constant
+        view
         returns (address[] _confirmations)
     {
         address[] memory confirmationsTemp = new address[](owners.length);
         uint count = 0;
         uint i;
-        for (i=0; i<owners.length; i++)
+        for (i = 0; i < owners.length; i++)
             if (confirmations[transactionId][owners[i]]) {
                 confirmationsTemp[count] = owners[i];
                 count += 1;
             }
         _confirmations = new address[](count);
-        for (i=0; i<count; i++)
+        for (i = 0; i < count; i++)
             _confirmations[i] = confirmationsTemp[i];
     }
 

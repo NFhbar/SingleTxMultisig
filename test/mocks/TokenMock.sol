@@ -5,8 +5,8 @@ import "zeppelin-solidity/contracts/token/ERC20/StandardToken.sol";
 // mock class using StandardToken
 contract TokenMock is StandardToken {
 
-  function TokenMock(address initialAccount, uint256 initialBalance) public {
-    balances[initialAccount] = initialBalance;
-    totalSupply_ = initialBalance;
-  }
+    constructor(address initialAccount, uint256 initialBalance) public {
+        balances[initialAccount] = initialBalance;
+        totalSupply_ = initialBalance;
+    }
 }

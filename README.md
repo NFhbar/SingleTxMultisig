@@ -4,6 +4,7 @@
 
 [![Build Status](https://travis-ci.org/NFhbar/SingleTxMultisig.png?branch=master)](https://travis-ci.org/NFhbar/SingleTxMultisig)
 [![Coverage Status](https://coveralls.io/repos/github/NFhbar/SingleTxMultisig/badge.svg?branch=master)](https://coveralls.io/github/NFhbar/SingleTxMultisig?branch=master)
+[![NSP Status](https://nodesecurity.io/orgs/nicolas-frega/projects/ff951f47-780c-48d0-af12-330754a60afa/badge)](https://nodesecurity.io/orgs/nicolas-frega/projects/ff951f47-780c-48d0-af12-330754a60afa)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/NFhbar/SingleTxMultisig/issues)
 
 </div>

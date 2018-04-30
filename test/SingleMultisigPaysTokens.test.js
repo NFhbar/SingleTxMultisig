@@ -4,75 +4,75 @@ import expectThrow from './helpers/expectThrow'
 
 contract('SingleMultisig - Contract Pays Tokens', accounts => {
 
-  it('Submit tx, pays Tokens, destroys', async () => {
+    it('Submit tx, pays Tokens, destroys', async () => {
     //deploy contracts
-    let singlemultisig
-    const owners = [accounts[0], accounts[1], accounts[2]]
-    const required = 2
-    singlemultisig = await SingleMultisig.new(owners, required, { from: accounts[0] })
-    const balance = 100
-    const zero = 0
-    let token = await TokenMock.new(accounts[1], balance)
+        let singlemultisig
+        const owners = [accounts[0], accounts[1], accounts[2]]
+        const required = 2
+        singlemultisig = await SingleMultisig.new(owners, required, { from: accounts[0] })
+        const balance = 100
+        const zero = 0
+        let token = await TokenMock.new(accounts[1], balance)
 
-    //sets owner correctly
-    const contract_address = await singlemultisig.address
-    assert.equal(await singlemultisig.owner(), singlemultisig.address)
+        //sets owner correctly
+        const contract_address = await singlemultisig.address
+        assert.equal(await singlemultisig.owner(), singlemultisig.address)
 
-    //send Token to multisig contract
-    await token.transfer(contract_address, balance, { from: accounts[1] })
-    let balance1 = await token.balanceOf.call(contract_address, { from: accounts[0] })
-    balance1 = balance1.toNumber()
-    let balance2 = await token.balanceOf.call(accounts[1], { from: accounts[0] })
-    balance2 = balance2.toNumber()
-    assert.equal(balance1, balance)
-    assert.equal(balance2, zero)
+        //send Token to multisig contract
+        await token.transfer(contract_address, balance, { from: accounts[1] })
+        let balance1 = await token.balanceOf.call(contract_address, { from: accounts[0] })
+        balance1 = balance1.toNumber()
+        let balance2 = await token.balanceOf.call(accounts[1], { from: accounts[0] })
+        balance2 = balance2.toNumber()
+        assert.equal(balance1, balance)
+        assert.equal(balance2, zero)
 
-    //Prepare and submit transaction data
-    const tx_value = 50
-    const data = token.contract.transfer.getData(accounts[2], tx_value, { from: contract_address })
-    await singlemultisig.submitTransaction(token.address, 0, data, { from: accounts[0] })
+        //Prepare and submit transaction data
+        const tx_value = 50
+        const data = token.contract.transfer.getData(accounts[2], tx_value, { from: contract_address })
+        await singlemultisig.submitTransaction(token.address, 0, data, { from: accounts[0] })
 
-    //check sender has tx confirmed
-    let confirmations = await singlemultisig.getConfirmations(0, { from: accounts[0] })
-    assert.equal(accounts[0], confirmations)
+        //check sender has tx confirmed
+        let confirmations = await singlemultisig.getConfirmations(0, { from: accounts[0] })
+        assert.equal(accounts[0], confirmations)
 
-    //check number of confirmations (should be 1)
-    let confirmationCount = await singlemultisig.getConfirmationCount(0, { from: accounts[0] })
-    assert.equal(1,confirmationCount)
+        //check number of confirmations (should be 1)
+        let confirmationCount = await singlemultisig.getConfirmationCount(0, { from: accounts[0] })
+        assert.equal(1,confirmationCount)
 
-    //get tx count
-    let txCount = await singlemultisig.transactionCount()
-    assert.equal(1,txCount)
+        //get tx count
+        let txCount = await singlemultisig.transactionCount()
+        assert.equal(1,txCount)
 
-    //check tx is not yet confirmed
-    let notConfirmed = await singlemultisig.isConfirmed(0)
-    assert.equal(notConfirmed, false)
+        //check tx is not yet confirmed
+        let notConfirmed = await singlemultisig.isConfirmed(0)
+        assert.equal(notConfirmed, false)
 
-    //cannot add another transaction
-    await expectThrow(singlemultisig.submitTransaction(contract_address, 0, data, { from: accounts[0] }))
+        //cannot add another transaction
+        await expectThrow(singlemultisig.submitTransaction(contract_address, 0, data, { from: accounts[0] }))
 
-    //check other owners can confirm
-    //await assertRevert(singlemultisig.confirmTransaction(0, { from: accounts[1] }));
-    await singlemultisig.confirmTransaction(0, { from: accounts[1] })
+        //check other owners can confirm
+        //await assertRevert(singlemultisig.confirmTransaction(0, { from: accounts[1] }));
+        await singlemultisig.confirmTransaction(0, { from: accounts[1] })
 
-    let newConfirmations = await singlemultisig.getConfirmationCount(0, { from: accounts[0] })
-    confirmations = await singlemultisig.getConfirmations(0, { from: accounts[0] })
-    assert.equal(2,newConfirmations)
-    assert.deepEqual([accounts[0], accounts[1]], confirmations)
+        let newConfirmations = await singlemultisig.getConfirmationCount(0, { from: accounts[0] })
+        confirmations = await singlemultisig.getConfirmations(0, { from: accounts[0] })
+        assert.equal(2,newConfirmations)
+        assert.deepEqual([accounts[0], accounts[1]], confirmations)
 
-    //since required confirmations is 2, tx is now confirmed and executed
-    const is_confirmed = await singlemultisig.isConfirmed(0)
-    assert.equal(is_confirmed, true)
+        //since required confirmations is 2, tx is now confirmed and executed
+        const is_confirmed = await singlemultisig.isConfirmed(0)
+        assert.equal(is_confirmed, true)
 
-    balance1 = await token.balanceOf.call(contract_address, { from: accounts[0] })
-    balance1 = balance1.toNumber()
-    balance2 = await token.balanceOf.call(accounts[2], { from: accounts[0] })
-    balance2 = balance2.toNumber()
-    assert.equal(balance1, balance - tx_value)
-    assert.equal(balance2, tx_value)
+        balance1 = await token.balanceOf.call(contract_address, { from: accounts[0] })
+        balance1 = balance1.toNumber()
+        balance2 = await token.balanceOf.call(accounts[2], { from: accounts[0] })
+        balance2 = balance2.toNumber()
+        assert.equal(balance1, balance - tx_value)
+        assert.equal(balance2, tx_value)
 
-    //cannot submit any more transactions
-    await expectThrow(singlemultisig.submitTransaction(contract_address, 0, data, { from: accounts[0] }))
+        //cannot submit any more transactions
+        await expectThrow(singlemultisig.submitTransaction(contract_address, 0, data, { from: accounts[0] }))
 
-  })
+    })
 })
