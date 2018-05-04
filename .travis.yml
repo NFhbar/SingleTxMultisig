@@ -6,14 +6,11 @@ services:
   - docker
 
 before_script:
-  - docker pull truffle/ci || true
-  - docker pull trufflesuite/ganache-cli || true
-  - docker pull codeclimate/codeclimate-eslint || true
+  - docker pull nfhbar/singletxmultisig || true
 
 script:
-  - docker build --pull --cache-from truffle/ci --tag truffle/ci .
-  - docker build --pull --cache-from trufflesuite/ganache-cli --tag trufflesuite/ganache-cli .
-  - docker build --pull --cache-from codeclimate/codeclimate-eslint --tag codeclimate/codeclimate-eslint .
+  - docker build --pull --cache-from nfhbar/singletxmultisig --tag nfhbar/singletxmultisig .
+  - docker run nfhbar/singletxmultisig
   - npm run lint
   - npm run ganache
   - sleep 5
@@ -21,4 +18,11 @@ script:
   - truffle test
   - npm run stop
 after_script:
+  - docker images
   - npm run coverage && cat coverage/lcov.info | coveralls
+
+deploy:
+  provider: script
+  script: docker push nfhbar/singletxmultisig
+  on:
+    branch: master
