@@ -14,7 +14,7 @@ script:
   - docker run --env-file .env nfhbar/singletxmultisig
 
 after_script:
-  - cd usr/src/app && npm run coverage && cat coverage/lcov.info | coveralls
+  - npm run coverage && cat coverage/lcov.info | coveralls
   - docker images
 
 before_deploy:
