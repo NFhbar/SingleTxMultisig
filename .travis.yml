@@ -15,16 +15,16 @@ install:
 script:
   - docker build --pull --cache-from nfhbar/singletxmultisig --tag nfhbar/singletxmultisig .
   - docker run nfhbar/singletxmultisig
-  # - npm run lint
-  # - npm run ganache
-  # - sleep 5
-  # - truffle migrate
-  # - truffle test
-  # - npm run stop
+  - npm run lint
+  - npm run ganache
+  - sleep 5
+  - truffle migrate
+  - truffle test
+  - npm run stop
 
 after_script:
+  - npm run coverage && cat coverage/lcov.info | coveralls
   - docker images
-  # - npm run coverage && cat coverage/lcov.info | coveralls
 
 before_deploy:
   - docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS"
