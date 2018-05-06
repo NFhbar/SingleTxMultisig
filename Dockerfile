@@ -1,58 +1,20 @@
-FROM debian:latest
-WORKDIR /var/workspace
+FROM node:carbon
 
-# replace bourne with bash to be able to source files
-RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+# Install global dependencies
+RUN npm install -g truffle
+RUN npm install -g ganache-cli
 
-# update the repository sources list
-# and install dependencies
-RUN apt-get update \
-    && apt-get install -y curl git python build-essential \
-    && apt-get -y autoclean
+# Create app directory
+WORKDIR /usr/src/app
 
-# nvm environment variables
-ENV NVM_DIR /usr/local/nvm
-ENV NODE_VERSION 6.9.1
-ENV LTS_VERSION 8.11.1
+# Install app dependencies
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+# where available (npm@5+)
+COPY package*.json ./
 
-# install nvm
-# https://github.com/creationix/nvm#install-script
-RUN curl --silent -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
+RUN npm install
+# If you are building your code for production
+# RUN npm install --only=production
 
-# install node and npm
-RUN source $NVM_DIR/nvm.sh \
-    && nvm install $NODE_VERSION \
-    && nvm install $LTS_VERSION \
-    && nvm alias default $NODE_VERSION \
-    && nvm alias lts $LTS_VERSION \
-    && nvm use default
-
-# add node and npm to path so the commands are available
-ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
-ENV PATH $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
-
-# fix bug with npm permissions as root (https://github.com/npm/npm/issues/13306)
-RUN cd $(npm root -g)/npm && \
-    npm install fs-extra && \
-    sed -i -e s/graceful-fs/fs-extra/ -e s/fs.rename/fs.move/ ./lib/utils/rename.js
-
-# use https checkout to avoid requiring deploy keys
-RUN git config --global url."https://github.com/".insteadOf "git@github.com:"
-
-# for web3's internal bignumber.js dependency
-RUN git config --global url."https".insteadOf "git+https"
-
-# confirm installation
-RUN node -v
-RUN npm -v
-
-# grab reference checkout for faster subsequent `npm install`s
-RUN git clone git@github.com:trufflesuite/truffle.git
-RUN npm install -g meta
-WORKDIR /var/workspace/truffle
-
-RUN npm install -g
-RUN meta git update
-RUN meta npm install
-
-COPY bin /usr/local/bin
+# Bundle app source
+COPY . .

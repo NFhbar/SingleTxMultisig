@@ -8,13 +8,9 @@ services:
 before_script:
   - docker pull nfhbar/singletxmultisig || true
 
-install:
+script:
   - docker build --pull --cache-from nfhbar/singletxmultisig --tag nfhbar/singletxmultisig .
   - docker run nfhbar/singletxmultisig
-  - npm install -g ganache-cli
-  - npm install
-
-script:
   - npm run lint
   - npm run ganache
   - sleep 5
