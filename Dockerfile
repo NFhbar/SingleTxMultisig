@@ -4,7 +4,7 @@ FROM node:carbon
 RUN npm install -g truffle
 RUN npm install -g ganache-cli
 
-# Create app directory
+# Create app directory - otherwise eslint will fail
 WORKDIR /usr/src/app
 
 # Install app dependencies
