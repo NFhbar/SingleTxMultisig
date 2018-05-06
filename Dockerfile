@@ -4,6 +4,9 @@ FROM node:carbon
 RUN npm install -g truffle
 RUN npm install -g ganache-cli
 
+# Create app directory
+WORKDIR /usr/src/app
+
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
@@ -15,3 +18,9 @@ RUN npm install
 
 # Bundle app source
 COPY . .
+
+RUN npm run lint
+RUN npm run ganache \
+    && sleep 5 \
+    && truffle migrate \
+    && truffle test \
