@@ -19,8 +19,11 @@ RUN npm install
 # Bundle app source
 COPY . .
 
+## Run eslint
 RUN npm run lint
+
+## Run ganache and tests
 RUN npm run ganache \
     && sleep 5 \
     && truffle migrate \
-    && truffle test \
+    && truffle test
