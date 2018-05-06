@@ -27,7 +27,7 @@ after_script:
   # - npm run coverage && cat coverage/lcov.info | coveralls
 
 before_deploy:
-  -docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS"
+  - docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS"
 
 deploy:
   provider: script
