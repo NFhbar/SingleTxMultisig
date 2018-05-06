@@ -6,12 +6,12 @@ services:
   - docker
 
 before_script:
-  - env | grep -vE "^(RINKEBY_PRIVATE_KEY=$RINKEBY_PRIVATE_KEY)" > .env
+  - env > .env
   - docker pull nfhbar/singletxmultisig || true
 
 script:
   - docker build --pull --cache-from nfhbar/singletxmultisig --tag nfhbar/singletxmultisig .
-  - docker run --env-file ./env nfhbar/singletxmultisig
+  - docker run --env-file .env nfhbar/singletxmultisig
 
 after_script:
   - npm run coverage && cat coverage/lcov.info | coveralls
