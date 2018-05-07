@@ -1,13 +1,11 @@
 sudo: required
-
 language: generic
-
 services:
   - docker
-
 env:
-  - IMAGE_NAME=nfhbar/singletxmultisig
-  - PACKAGE_VERSION=$(node -p "require('./package.json').version")
+  global:
+    - IMAGE_NAME=nfhbar/singletxmultisig
+    - PACKAGE_VERSION=$(node -p "require('./package.json').version")
 
 before_script:
   - docker pull "${IMAGE_NAME}" || true
