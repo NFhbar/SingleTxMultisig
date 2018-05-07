@@ -10,10 +10,8 @@ services:
 env:
   global:
     - IMAGE_NAME=nfhbar/singletxmultisig
-    - PACKAGE_VERSION=node -p require('./package.json').version
-
-before_script:
-  - docker pull "${IMAGE_NAME}" || true
+    - PACKAGE_VERSION="$(awk '/version/{gsub(/("|",)/,"",$2);print $2};' package.json)"
+    - docker pull "${IMAGE_NAME}" || true
 
 install:
   - npm install -g truffle
