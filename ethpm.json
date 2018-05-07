@@ -1,0 +1,15 @@
+{
+  "package_name": "single-tx-multisig",
+  "version": "1.2.0",
+  "description": "single transaction multisignature wallet",
+  "authors": [
+    "Nicolas Frega <frega.nicolas@gmail.com>"
+  ],
+  "keywords": [
+    "ethereum",
+    "multisignature",
+    "wallet"
+  ],
+  "dependencies": {},
+  "license": "MIT"
+}

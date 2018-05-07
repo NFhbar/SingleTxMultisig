@@ -5,18 +5,33 @@ language: generic
 services:
   - docker
 
+env:
+  - IMAGE_NAME=nfhbar/singletxmultisig
+  - PACKAGE_VERSION=$(node -p "require('./package.json').version")
+
 before_script:
-  - env > .env
-  - docker pull nfhbar/singletxmultisig || true
+  - docker pull "${IMAGE_NAME}" || true
+
+install:
+  - npm install -g truffle
+  - npm install -g ganache-cli
+  - npm install
 
 script:
-  - docker build --pull --cache-from nfhbar/singletxmultisig --tag nfhbar/singletxmultisig .
-  - docker run --env-file .env nfhbar/singletxmultisig
-      && cd /usr/src/app
-        && npm run coverage
-          && cat coverage/lcov.info | coveralls
+  - npm run lint
+  - npm run ganache
+  - sleep 5
+  - truffle migrate
+  - truffle test
+  - npm run stop
+  - truffle networks --clean
+  - truffle publish
+  - sleep 60
+  - docker build --pull --cache-from "${IMAGE_NAME}" --tag "${IMAGE_NAME}" .
+  - docker run -e PACKAGE_VERSION "${IMAGE_NAME}"
 
 after_script:
+  - npm run coverage && cat coverage/lcov.info | coveralls
   - docker images
 
 before_deploy:
@@ -24,6 +39,6 @@ before_deploy:
 
 deploy:
   provider: script
-  script: docker push nfhbar/singletxmultisig
+  script: docker push "${IMAGE_NAME}"
   on:
     branch: master
