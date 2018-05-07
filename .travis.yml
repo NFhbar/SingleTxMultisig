@@ -24,9 +24,9 @@ script:
   - truffle migrate
   - truffle test
   - npm run stop
-  - truffle networks --clean
-  - truffle publish
-  - sleep 60
+  # - truffle networks --clean
+  # - truffle publish
+  # - sleep 60
   - docker build --pull --cache-from "${IMAGE_NAME}" --tag "${IMAGE_NAME}" .
   - docker run -e PACKAGE_VERSION "${IMAGE_NAME}"
 
