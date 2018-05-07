@@ -1,5 +1,7 @@
 # Single Transaction Multi Signature Contract
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/NFhbar/SingleTxMultisig.svg)](https://greenkeeper.io/)
+
 <div>
 
 [![Build Status](https://travis-ci.org/NFhbar/SingleTxMultisig.png?branch=master)](https://travis-ci.org/NFhbar/SingleTxMultisig)
