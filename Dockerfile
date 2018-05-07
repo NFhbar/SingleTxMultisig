@@ -16,6 +16,7 @@ FROM node:carbon
 #
 # RUN truffle install single-tx-multisig@$PACKAGE_VERSION
 
+RUN npm install -g truffle
 
 # Create app directory
 WORKDIR /usr/src/app

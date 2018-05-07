@@ -31,7 +31,7 @@ script:
   # - truffle publish
   # - sleep 60
   - docker build --pull --cache-from "${IMAGE_NAME}" --tag "${IMAGE_NAME}" .
-  - docker run -e PACKAGE_VERSION "${IMAGE_NAME}"
+  # - docker run -e PACKAGE_VERSION "${IMAGE_NAME}"
 
 after_script:
   - npm run coverage && cat coverage/lcov.info | coveralls
@@ -39,9 +39,10 @@ after_script:
 
 before_deploy:
   - docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS"
-
+  - docker tag "$IMAGE_NAME" "${IMAGE_NAME}:latest"
+  - docker tag "$IMAGE_NAME" "${IMAGE_NAME}:${PACKAGE_VERSION}"
 deploy:
   provider: script
-  script: docker push "${IMAGE_NAME}"
+  script: docker push "${IMAGE_NAME}:latest" && docker push "${IMAGE_NAME}:${version}"
   on:
     branch: master
