@@ -1,5 +1,5 @@
 const SingleMultisig = artifacts.require('SingleMultiSig')
-import expectThrow from './helpers/expectThrow'
+import expectThrow from '../helpers/expectThrow'
 
 contract('SingleMultisig - Contract Pays ETH', accounts => {
 

@@ -1,5 +1,5 @@
 const SingleMultisig = artifacts.require('SingleMultiSig')
-const TokenMock = artifacts.require('mocks/TokenMock.sol')
+const TokenMock = artifacts.require('mocks/StandardTokenMock.sol')
 
 contract('SingleMultisig - Receive ETH and Token', accounts => {
 

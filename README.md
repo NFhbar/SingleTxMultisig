@@ -21,7 +21,15 @@ modifier onlyOneTransaction() {
 ```
 which allows for only one transaction. After that the contract is rendered unusable.
 
+Useful for simple transactions in which parties part ways after execution.
+
 ## Install
+### ethpm
+```
+$ truffle install single-tx-multisig@2.2.1
+```
+
+### Clone
 Clone repo:
 ```
 git clone git@github.com:NFhbar/SingleTxMultisig.git
@@ -69,6 +77,9 @@ $ npm run coverage
 Keep in mind solidity-coverage now expects a globally installed truffle.
 Coverage report available [here](https://github.com/NFhbar/SingleTxMultisig/blob/master/coverage).
 
+## Docker
+Docker image [here](https://hub.docker.com/r/nfhbar/singletxmultisig/).
+
 ## Issues/Bugs
 ### Wrong Contract Address
 When migrating
@@ -83,10 +94,12 @@ When testing in truffle develop
 Error: sender doesn't have enough funds to send tx.
 ```
 Solution: restart truffle develop.
+
 Notes: truffle does not reset accounts balance on multiple runs.
 
 ### Solidity Coverage testrpc ghost process
 After running solidity-coverage, testrpc remains a ghost process.
+
 Solution: kill it with:
 ```
 $ npm run stop

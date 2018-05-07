@@ -8,9 +8,8 @@ pragma solidity ^0.4.21;
 ///
 
 import "./Ownable.sol";
-import "./Destructible.sol";
 
-contract SingleMultiSig is Ownable, Destructible {
+contract SingleMultiSig is Ownable {
 
     /*
      *  Events
@@ -19,7 +18,7 @@ contract SingleMultiSig is Ownable, Destructible {
     event Revocation(address indexed sender, uint indexed transactionId);
     event Submission(uint indexed transactionId);
     event Execution(uint indexed transactionId);
-    event ContractDestroyed();
+    event ContractUnusable();
     event ExecutionFailure(uint indexed transactionId);
     event Deposit(address indexed sender, uint value);
 
@@ -182,7 +181,7 @@ contract SingleMultiSig is Ownable, Destructible {
             txn.executed = true;
             if (txn.destination.call.value(txn.value)(txn.data)) {
                 emit Execution(transactionId);
-                destroyContract();
+                emit ContractUnusable();
               }
             else {
                 emit ExecutionFailure(transactionId);
@@ -230,15 +229,6 @@ contract SingleMultiSig is Ownable, Destructible {
         });
         transactionCount += 1;
         emit Submission(transactionId);
-    }
-
-    /// @dev Destroys contract after one transaction is executed.
-    function destroyContract()
-        internal
-    {
-        emit ContractDestroyed();
-        /*if(this.balance != 0)
-          destroyAndSend(owners[0]);*/
     }
 
     /*

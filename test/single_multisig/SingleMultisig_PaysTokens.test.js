@@ -1,6 +1,6 @@
 const SingleMultisig = artifacts.require('SingleMultiSig')
-const TokenMock = artifacts.require('mocks/TokenMock.sol')
-import expectThrow from './helpers/expectThrow'
+const TokenMock = artifacts.require('mocks/StandardTokenMock.sol')
+import expectThrow from '../helpers/expectThrow'
 
 contract('SingleMultisig - Contract Pays Tokens', accounts => {
 
