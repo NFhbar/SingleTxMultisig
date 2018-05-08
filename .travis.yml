@@ -1,3 +1,4 @@
+sudo: required
 language: node_js
 node_js:
   - "9"
@@ -5,46 +6,44 @@ cache:
   directories:
     - node_modules
 
-matrix:
-  include:
-    - sudo: required
-    services:
-      - docker
-    env:
-      - IMAGE_NAME=nfhbar/singletxmultisig
+services:
+  - docker
+env:
+  global:
+    - IMAGE_NAME=nfhbar/singletxmultisig
 
-    before_script:
-      - docker pull "${IMAGE_NAME}:develop" || true
+before_script:
+  - docker pull "${IMAGE_NAME}:develop" || true
 
-      install:
-      - npm install -g truffle
-      - npm install -g ganache-cli
-      - npm install
+  install:
+  - npm install -g truffle
+  - npm install -g ganache-cli
+  - npm install
 
-    script:
-      - npm run lint
-      - npm run ganache
-      - sleep 5
-      - truffle migrate
-      - truffle test
-      - npm run stop
-      # - truffle networks --clean
-      # - truffle publish
-      # - sleep 60
-      - docker build --pull --cache-from "${IMAGE_NAME}:develop" --tag "${IMAGE_NAME}" .
-      # - docker run -e PACKAGE_VERSION "${IMAGE_NAME}"
+script:
+  - npm run lint
+  - npm run ganache
+  - sleep 5
+  - truffle migrate
+  - truffle test
+  - npm run stop
+  # - truffle networks --clean
+  # - truffle publish
+  # - sleep 60
+  - docker build --pull --cache-from "${IMAGE_NAME}:develop" --tag "${IMAGE_NAME}" .
+  # - docker run -e PACKAGE_VERSION "${IMAGE_NAME}"
 
-    after_script:
-      - npm run coverage && cat coverage/lcov.info | coveralls
-      - docker images
+after_script:
+  - npm run coverage && cat coverage/lcov.info | coveralls
+  - docker images
 
-  before_deploy:
-    - docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS"
-    - git_sha="$(git rev-parse --short HEAD)"
-    - docker tag "$IMAGE_NAME" "${IMAGE_NAME}:develop"
-    - docker tag "$IMAGE_NAME" "${IMAGE_NAME}:${PACKAGE_VERSION}:${git_sha}-develop"
-  deploy:
-    provider: script
-    script: docker push "${IMAGE_NAME}:develop" && docker push "${IMAGE_NAME}:${git_sha}-develop"
-    on:
-      branch: develop
+before_deploy:
+  - docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS"
+  - git_sha="$(git rev-parse --short HEAD)"
+  - docker tag "$IMAGE_NAME" "${IMAGE_NAME}:develop"
+  - docker tag "$IMAGE_NAME" "${IMAGE_NAME}:${PACKAGE_VERSION}:${git_sha}-develop"
+deploy:
+  provider: script
+  script: docker push "${IMAGE_NAME}:develop" && docker push "${IMAGE_NAME}:${git_sha}-develop"
+  on:
+    branch: develop
