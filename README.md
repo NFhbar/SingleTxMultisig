@@ -20,7 +20,6 @@ modifier onlyOneTransaction() {
     }
 ```
 which allows for only one transaction. After that the contract is rendered unusable.
-
 Useful for simple transactions in which parties part ways after execution.
 
 ## Install
