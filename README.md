@@ -88,7 +88,7 @@ When migrating
 ```
 Error: Attempting to run transaction which calls a contract function, but recipient address 0x8cdaf0cd259887258bc13a92c0a6da92698644c0 is not a contract address
 ```
-Solution: delete contents of /build/contracts and recompile.
+Solution: delete contents of [/build/contracts](./build/contracts) and recompile.
 
 ### Not Enough Funds during test
 When testing in truffle develop
