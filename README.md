@@ -80,6 +80,7 @@ Coverage report available [here](https://github.com/NFhbar/SingleTxMultisig/blob
 
 ## Docker
 Docker image [here](https://hub.docker.com/r/nfhbar/singletxmultisig/).
+Dockerfile [here](https://github.com/NFhbar/Docker-SingleTxMultisig).
 
 ## Issues/Bugs
 ### Wrong Contract Address

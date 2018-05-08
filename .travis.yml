@@ -5,13 +5,13 @@ node_js:
 cache:
   directories:
   - node_modules
-services:
-  - docker
-env:
-  global:
-    - IMAGE_NAME=nfhbar/singletxmultisig
-    - PACKAGE_VERSION="$(awk '/version/{gsub(/("|",)/,"",$2);print $2};' package.json)"
-    - docker pull "${IMAGE_NAME}" || true
+# services:
+#   - docker
+# env:
+#   global:
+#     - IMAGE_NAME=nfhbar/singletxmultisig
+#     - PACKAGE_VERSION="$(awk '/version/{gsub(/("|",)/,"",$2);print $2};' package.json)"
+#     - docker pull "${IMAGE_NAME}" || true
 
 install:
   - npm install -g truffle
@@ -28,19 +28,19 @@ script:
   # - truffle networks --clean
   # - truffle publish
   # - sleep 60
-  - docker build --pull --cache-from "${IMAGE_NAME}" --tag "${IMAGE_NAME}" .
+  # - docker build --pull --cache-from "${IMAGE_NAME}" --tag "${IMAGE_NAME}" .
   # - docker run -e PACKAGE_VERSION "${IMAGE_NAME}"
 
 after_script:
   - npm run coverage && cat coverage/lcov.info | coveralls
-  - docker images
+  # - docker images
 
-before_deploy:
-  - docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS"
-  - docker tag "$IMAGE_NAME" "${IMAGE_NAME}:latest"
-  - docker tag "$IMAGE_NAME" "${IMAGE_NAME}:${PACKAGE_VERSION}"
-deploy:
-  provider: script
-  script: docker push "${IMAGE_NAME}:latest" && docker push "${IMAGE_NAME}:${PACKAGE_VERSION}"
-  on:
-    branch: master
+# before_deploy:
+#   - docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS"
+#   - docker tag "$IMAGE_NAME" "${IMAGE_NAME}:latest"
+#   - docker tag "$IMAGE_NAME" "${IMAGE_NAME}:${PACKAGE_VERSION}"
+# deploy:
+#   provider: script
+#   script: docker push "${IMAGE_NAME}:latest" && docker push "${IMAGE_NAME}:${PACKAGE_VERSION}"
+#   on:
+#     branch: master
