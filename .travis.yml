@@ -15,10 +15,10 @@ env:
 before_script:
   - docker pull "${IMAGE_NAME}:develop" || true
 
-  install:
-  - npm install -g truffle
-  - npm install -g ganache-cli
-  - npm install
+install:
+- npm install -g truffle
+- npm install -g ganache-cli
+- npm install
 
 script:
   - npm run lint
