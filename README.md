@@ -28,6 +28,7 @@ Useful for simple transactions in which parties part ways after execution.
 ```
 $ truffle install single-tx-multisig@2.2.1
 ```
+[single-tx-multisig](https://www.ethpm.com/registry/packages/47).
 
 ### Clone
 Clone repo:
@@ -110,4 +111,4 @@ $ npm run coverage
 ```
 
 ## License
-[MIT](https://github.com/OpenZeppelin/zeppelin-solidity/blob/master/LICENSE)
+[MIT](./LICENSE.md)
