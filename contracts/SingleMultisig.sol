@@ -1,7 +1,7 @@
 pragma solidity ^0.4.21;
 
 /// @title SingleMultisig.sol
-/// @author Nicolas Frega - <nicolas.frega@srax.com>
+/// @author Nicolas Frega - <frega.nicolas@gmail.com>
 /// Allows multiple parties to agree on a single transaction before execution.
 /// The contract is destroyed after execution.
 /// Based on Gnosis Multisig Wallet - https://github.com/gnosis/MultiSigWallet.
